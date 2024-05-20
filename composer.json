@@ -3,6 +3,7 @@
     "description": "Module for simplifying interractions with leveon's exchange api",
     "type": "library",
     "license": "Apache-2.0",
+    "version": "0.1.7",
     "autoload": {
         "psr-4": {
             "Leveon\\Connector\\": "src/"

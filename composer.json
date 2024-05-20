@@ -1,0 +1,19 @@
+{
+    "name": "leveon/connector",
+    "description": "Module for simplifying interractions with leveon's exchange api",
+    "type": "library",
+    "license": "Apache-2.0",
+    "autoload": {
+        "psr-4": {
+            "Leveon\\Connector\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "MrLIN",
+            "email": "mrlin@mm.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {}
+}

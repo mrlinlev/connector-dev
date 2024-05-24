@@ -46,9 +46,14 @@ class Connector{
 		$req = $this->request($url, "DELETE");
 		return $data!==null? $req->data(json_encode($data)): $req;
 	}
-	
-	
-	public function process($req){
+
+
+    /**
+     * Подписание и отправка запроса к апи
+     * @param CurlOutRequest $req
+     * @return CurlOutRequest
+     */
+    public function process(CurlOutRequest $req){
 		$fullUrl = $req->get_url();
 		if($req->get_query()){
 			$fullUrl .= '?'.http_build_query($req->get_query());
@@ -61,8 +66,6 @@ class Connector{
 		]; 
 		if($req->get_data()!==null)
 			$imp[] = $req->get_data();
-		#var_dump($req->get_data());
-		#var_dump(implode('-', $imp));
 		return $req
 			->addHeader('X-DATE', $time)
 			->addHeader('X-SIGN', hash('sha256', implode('-', $imp)))

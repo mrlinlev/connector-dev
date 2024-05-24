@@ -9,7 +9,7 @@ class ProductType extends APropertiableModel{
 	#prop parent vgs aprot
 	protected $parent = 0;
 
-	protected static $valueableList = ['title', 'parent'];
+    protected static array $valueableList = ['title', 'parent'];
 
 	#gen - begin
 	public function getTitle(){ return $this->title; }

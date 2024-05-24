@@ -17,12 +17,12 @@ class ProductAmount extends AModel{
 	];
 	
 	public static $final = 'amount';
-	
-	protected static $valueableList = [
-		'amount',
-		'product',
-		'store',
-	];
+
+    protected static array $valueableList = [
+        'amount',
+        'product',
+        'store',
+    ];
 	
 	public function toJSON($rules = []){
 		$result = [];

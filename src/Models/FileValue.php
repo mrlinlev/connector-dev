@@ -2,14 +2,14 @@
 
 namespace Leveon\Connector\Models;
 
-class FileValue extends AModel{
+class FileValue extends AModel {
 	
 	#prop file vgs aprot
 	protected $file;
 	#prop title vgs aprot
 	protected $title;
-	
-	protected static $valueableList = ['file', 'title'];
+
+    protected static array $valueableList = ['file', 'title'];
 	
 	public static function Url($file, $ext = null, $title = null){
 		$ext = $ext===null? '': $ext;

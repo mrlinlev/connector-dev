@@ -14,13 +14,13 @@ class OfferPrice extends APrice{
 	];
 	
 	public static $final = 'value';
-	
-	protected static $valueableList = [
-		'value',
-		'currency',
-		'offer',
-		'priceType',
-	];
+
+    protected static array $valueableList = [
+        'value',
+        'currency',
+        'offer',
+        'priceType',
+    ];
 	
 	public function toJSON($rules = []){
 		$result = [];

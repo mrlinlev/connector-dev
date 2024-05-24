@@ -9,7 +9,7 @@ class Brand extends APropertiableModel{
 	#prop image vgs aprot
 	protected $image;
 
-	protected static $valueableList = ['title', 'image'];
+    protected static array $valueableList = ['title', 'image'];
 		
 	#gen - begin
 	public function getTitle(){ return $this->title; }

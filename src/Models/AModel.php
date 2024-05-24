@@ -2,12 +2,13 @@
 
 namespace Leveon\Connector\Models;
 
+use Exception;
+
 abstract class AModel{
-	
-	protected static $defaults = [];
-	protected static $valueableList = [];
-	protected static $lists = [];
-	protected static $entitiesList = [];	
+
+    protected static array $valueableList = [];
+    protected static array $lists = [];
+    protected static array $entitiesList = [];
 	
 	public function __construct($info = null){
 		if($info!==null){
@@ -15,12 +16,12 @@ abstract class AModel{
 			foreach(static::$lists as $field => $class){
 				$val = self::GetField($info, $field);
 				if($val!==null)
-					$this->{$field} = $class::LoadAssocList($val, [$this->preferences]);
+					$this->{$field} = $class::LoadAssocList($val);
 			}
 			foreach(static::$entitiesList as $field => $class){
 				$val = self::GetField($info, $field);
 				if($val!==null)
-					$this->{$field} = new $class($this->preferences, $val);
+					$this->{$field} = new $class($val);
 			}
 		}
 	}
@@ -29,9 +30,14 @@ abstract class AModel{
 		return new static($info = null);
 	}
 
-	public function val($key){
+    /**
+     * @param $key
+     * @return mixed
+     * @throws Exception
+     */
+    public function val($key){
 		if(isset($this->{$key})) return $this->{$key};
-		throw new \Exception("Unknown field {$key} in class ".static::class);
+		throw new Exception("Unknown field {$key} in class ".static::class);
 	}
 
 	protected function fieldsToJson($fields){

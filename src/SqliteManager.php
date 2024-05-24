@@ -2,6 +2,8 @@
 
 namespace Leveon\Connector;
 
+use Exception;
+
 class SqliteManager{
 	
 	#prop path vgS
@@ -53,8 +55,15 @@ class SqliteManager{
 	public function unbindOuter($type, $outerId){
 		$this->exec("DELETE FROM {$this->tableByType($type)} WHERE outer = ?", $this->typeOuterId($type, $outerId));
 	}
-	
-	private function typeOuterId($type, $outerId){
+
+    /**
+     * Получение фильтра сущности по типу сущности и значениею
+     * @param $type - тип сущности
+     * @param $outerId - id в катаоге Leveon
+     * @return array | string
+     * @throws Exception
+     */
+    private function typeOuterId($type, $outerId){
 		switch($type){
 			case 'brand':
 			case 'collection':
@@ -62,11 +71,17 @@ class SqliteManager{
 			case 'property': return ['i'=>$outerId];
 			case 'product': 
 			case 'offer': return $outerId;
-			default: throw new \Excption("Unknown type `{$type}`");
+			default: throw new Exception("Unknown type `{$type}`");
 		}
 	}
-	
-	private function tableByType($type){
+
+    /**
+     * Получение таблицы сущности по типу сущности
+     * @param $type - тип сущности
+     * @return string
+     * @throws Exception
+     */
+    private function tableByType($type){
 		switch($type){
 			case 'brand': return 'brands';
 			case 'collection': return 'collections';
@@ -74,7 +89,7 @@ class SqliteManager{
 			case 'property': return 'properties';
 			case 'product': return 'products';
 			case 'offer': return 'offers';
-			default: throw new \Exception("Unknown type `{$type}`");
+			default: throw new Exception("Unknown type `{$type}`");
 		}
 	}
 	
@@ -129,7 +144,6 @@ class SqliteManager{
 			}
 		}
 		$sql = $stmt->getSql(true);
-		#var_dump($sql);
 		return $sql;
 	}
 	

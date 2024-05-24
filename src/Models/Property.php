@@ -14,13 +14,13 @@ class Property extends AModel{
 	protected $type;
 	#prop scheme vgs aprot
 	protected $scheme;
-	
-	protected static $valueableList = [
-		'title',
-		'options',
-		'multiple',
-		'type',
-	];
+
+    protected static array $valueableList = [
+        'title',
+        'options',
+        'multiple',
+        'type',
+    ];
 	
 	protected static $lists = [
 		'scheme' => PropertyTuning::class

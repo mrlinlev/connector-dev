@@ -1,6 +1,6 @@
 {
     "name": "leveon/connector",
-    "description": "Module for simplifying interractions with leveon's exchange api",
+    "description": "Module for simplifying interactions with leveon's exchange api",
     "type": "library",
     "license": "Apache-2.0",
     "version": "0.1.8",
@@ -16,5 +16,9 @@
         }
     ],
     "minimum-stability": "stable",
-    "require": {}
+    "require": {
+        "php": "^8.1",
+        "ext-json": "*",
+        "ext-sqlite3": "*"
+    }
 }

@@ -17,12 +17,12 @@ class OfferAmount extends AModel{
 	];
 	
 	public static $final = 'amount';
-	
-	protected static $valueableList = [
-		'amount',
-		'offer',
-		'store',
-	];
+
+    protected static array $valueableList = [
+        'amount',
+        'offer',
+        'store',
+    ];
 	
 	public function toJSON($rules = []){
 		$result = [];

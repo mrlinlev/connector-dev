@@ -15,11 +15,11 @@ class DeleteOfferAmount extends AModel{
 	];
 	
 	public static $final = null;
-	
-	protected static $valueableList = [
-		'offer',
-		'store',
-	];
+
+    protected static array $valueableList = [
+        'offer',
+        'store',
+    ];
 	
 	public function toJSON($rules = []){
 		$result = [];

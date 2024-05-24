@@ -3,6 +3,10 @@
 namespace Leveon\Connector;
 
 use Leveon\Connector\Models\AModel;
+use Leveon\Connector\Models\AmountsPacker;
+use Leveon\Connector\Models\PricesPacker;
+use Leveon\Connector\Models\RelationsPacker;
+use Leveon\Connector\Util\CurlOutRequest;
 
 class SyncRequestsFactory{
 	
@@ -25,11 +29,11 @@ class SyncRequestsFactory{
 		$this->db = new SqliteManager();
 	}
 	
-	private static function succ($resp){
+	private static function isSucceeded(CurlOutRequest $resp){
 		return intdiv($resp->getResponseCode(), 100)===2;
 	}
 	
-	public function syncPrices($packer){
+	public function syncPrices(PricesPacker $packer){
 		foreach(['product', 'offer'] as $type){
 			$send = $packer->toJSON(['type' => $type, 'delete' => true]);
 			if($send!==null){
@@ -37,7 +41,7 @@ class SyncRequestsFactory{
 				$resp = $c->process(
 					$c->delete("{$this->catalogPath}/{$type}/prices", $send)
 				);
-				if(!self::succ($resp)) return false;
+				if(!self::isSucceeded($resp)) return false;
 			}
 			$send = $packer->toJSON(['type' => $type, 'delete' => false]);
 			if($send!==null){
@@ -45,13 +49,13 @@ class SyncRequestsFactory{
 				$resp = $c->process(
 					$c->patch("{$this->catalogPath}/{$type}/prices", $send)
 				);
-				if(!self::succ($resp)) return false;
+				if(!self::isSucceeded($resp)) return false;
 			}
 		}
 		return true;
 	}
 		
-	public function syncAmounts($packer){
+	public function syncAmounts(AmountsPacker $packer){
 		foreach(['product', 'offer'] as $type){
 			$send = $packer->toJSON(['type' => $type, 'delete' => true]);
 			if($send!==null){
@@ -59,7 +63,7 @@ class SyncRequestsFactory{
 				$resp = $c->process(
 					$c->delete("{$this->catalogPath}/{$type}/amounts", $send)
 				);
-				if(!self::succ($resp)) return false;
+				if(!self::isSucceeded($resp)) return false;
 			}
 			$send = $packer->toJSON(['type' => $type, 'delete' => false]);
 			if($send!==null){
@@ -67,13 +71,13 @@ class SyncRequestsFactory{
 				$resp = $c->process(
 					$c->patch("{$this->catalogPath}/{$type}/amounts", $send)
 				);
-				if(!self::succ($resp)) return false;
+				if(!self::isSucceeded($resp)) return false;
 			}
 		}
 		return true;
 	}
 		
-	public function syncRelations($packer){
+	public function syncRelations(RelationsPacker $packer){
 		$send = $packer->toJSON(['old']);
 		if($send!==null){
 			$c = $this->conn;
@@ -98,7 +102,6 @@ class SyncRequestsFactory{
 		if($outer===null){
 			$c = $this->conn;
 			$send = $model instanceof AModel? $model->toJSON(): $model;
-	    #echo json_encode($send, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE)."\n";
 			$resp = $c->process(
 				$c->post("{$this->catalogPath}/{$path}", $send)
 			);
@@ -119,14 +122,12 @@ class SyncRequestsFactory{
 		if($outer===null){
 			$c = $this->conn;
 			$send = $model instanceof AModel? $model->toJSON(): $model;
-	    #echo json_encode($send, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE)."\n";
 			$resp = $c->process(
 				$c->post("{$this->catalogPath}/{$path}/model", $send)
 			);
 			if($resp->getResponseCode()===200 || $resp->getResponseCode()===201){
 				$outerId = json_decode($resp->getResponse())->id;
 				var_dump($outerId);
-				#var_dump($resp->getResponse());
 				$this->db->bind($type, $localId, $outerId);
 			}
 			return $resp->getResponseCode()>199 && $resp->getResponseCode()<300;
@@ -160,7 +161,6 @@ class SyncRequestsFactory{
 		$c = $this->conn;
 		$outer = $this->db->outerByLocal($type, $localId);
 		$send = $model instanceof AModel? $model->toJSON(): $model;
-	  #echo json_encode($send, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE)."\n";
 		$resp = null;
 		if($outer!==null){
 			$resp = $c->process(
@@ -222,7 +222,7 @@ class SyncRequestsFactory{
 	}
 	
 	public function delAllBrands(){
-		return $this->delAllInstances('brand', 'brand');
+		$this->delAllInstances('brand', 'brand');
 	}
 	
 	public function createPropertyIfNotExists($localId, $model){
@@ -277,7 +277,7 @@ class SyncRequestsFactory{
 	}
 	
 	public function delAllProducts(){
-		return $this->delAllInstances('product', 'products');
+		$this->delAllInstances('product', 'products');
 	}
 	
 	public function createOfferIfNotExists($localId, $model){

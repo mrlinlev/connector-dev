@@ -14,13 +14,13 @@ class ProductPrice extends APrice{
 	];
 	
 	public static $final = 'value';
-	
-	protected static $valueableList = [
-		'value',
-		'currency',
-		'product',
-		'priceType',
-	];
+
+    protected static array $valueableList = [
+        'value',
+        'currency',
+        'product',
+        'priceType',
+    ];
 	
 	public function toJSON($rules = []){
 		$result = [];

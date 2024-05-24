@@ -2,12 +2,12 @@
 
 namespace Leveon\Connector\Models;
 
-class SimpleValue extends AModel{
+class SimpleValue extends AModel {
 	
 	#prop value vgs aprot
 	protected $value;
-	
-	protected static $valueableList = ['value'];
+
+    protected static array $valueableList = ['value'];
 	
 	public static function V($value){
 		return (new static())->setValue($value);

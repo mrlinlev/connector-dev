@@ -8,18 +8,18 @@ class DeleteProductAmount extends AModel{
 	protected $product;
 	#prop store vgs aprot
 	protected $store;
-	
-	public static $compressable = [
-		'product',
-		'store',
-	];
+
+    public static array $compressable = [
+        'product',
+        'store',
+    ];
 	
 	public static $final = null;
-	
-	protected static $valueableList = [
-		'product',
-		'store',
-	];
+
+    protected static array $valueableList = [
+        'product',
+        'store',
+    ];
 	
 	public function toJSON($rules = []){
 		$result = [];

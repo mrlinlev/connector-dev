@@ -15,13 +15,13 @@ class PropertyTuning extends AModel{
 	#prop displayUnit vgs aprot
 	protected $displayUnit;
 
-	protected static $valueableList = [
-		'defaultValue',
-		'defaultUnit',
-		'unitsGroup',
-		'storageUnit',
-		'displayUnit',
-	];
+    protected static array $valueableList = [
+        'defaultValue',
+        'defaultUnit',
+        'unitsGroup',
+        'storageUnit',
+        'displayUnit',
+    ];
 			
 	#gen - begin
 	public function getDefaultValue(){ return $this->defaultValue; }

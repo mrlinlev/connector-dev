@@ -2,6 +2,8 @@
 
 namespace Leveon\Connector\Models;
 
+use Exception;
+
 class RelationsPacker extends APacker{
 	
 	#prop newRelations vgS aprot
@@ -18,15 +20,20 @@ class RelationsPacker extends APacker{
 		$this->oldRelations[] = $relation;
 		return $this;
 	}
-	
-	public function toJSON($rules = []){
+
+    /**
+     * @param array $rules
+     * @return array|null
+     * @throws Exception
+     */
+    public function toJSON($rules = []){
 		if(in_array('new', $rules)){
 			return $this->pack($this->newRelations, Relation::class);
 		}
 		if(in_array('old', $rules)){
 			return $this->pack($this->oldRelations, Relation::class);
 		}
-		throw new \Exception("Wrong args: ".implode(', ', $rules));
+		throw new Exception("Wrong args: ".implode(', ', $rules));
 	}
 	
 	

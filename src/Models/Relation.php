@@ -18,12 +18,12 @@ class Relation extends AModel{
 	];
 	
 	public static $final = null;
-	
-	protected static $valueableList = [
-		'relation',
-		'source',
-		'target',
-	];
+
+    protected static array $valueableList = [
+        'relation',
+        'source',
+        'target',
+    ];
 	
 	public function toJSON($rules = []){
 		$result = [];

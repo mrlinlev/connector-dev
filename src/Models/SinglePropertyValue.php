@@ -2,22 +2,16 @@
 
 namespace Leveon\Connector\Models;
 
-class SinglePropertyValue extends AModel{
+class SinglePropertyValue extends APropertyValue{
 	
-	#prop property vgs aprot
-	protected $property;
-	#prop value vgs aprot
 	protected $value;
+
+    protected static array $valueableList = ['property'];
+    protected static array $entitiesList = [
+        'value' => AModel::class
+    ];
 	
-	protected static $valueableList = ['property'];
-	protected static $entitiesList = [
-		'value' => AModel::class
-	];	
-	
-	#gen - begin
-	public function getProperty(){ return $this->property; }
-	public function setProperty($property){ $this->property = $property; return $this; }
 	public function getValue(){ return $this->value; }
 	public function setValue($value){ $this->value = $value; return $this; }
-	#gen - end
+
 }

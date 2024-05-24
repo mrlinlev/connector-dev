@@ -19,15 +19,15 @@ class Product extends APropertiableModel{
 	#prop accountingUnit vgs aprot
 	protected $accountingUnit;
 
-	protected static $valueableList = [
-		'title',
-		'image',
-		'brand',
-		'collection',
-		'type',
-		'article',
-		'accountingUnit'
-	];
+    protected static array $valueableList = [
+        'title',
+        'image',
+        'brand',
+        'collection',
+        'type',
+        'article',
+        'accountingUnit'
+    ];
 	
 	#gen - begin
 	public function getTitle(){ return $this->title; }

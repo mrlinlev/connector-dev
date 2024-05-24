@@ -2,6 +2,8 @@
 
 namespace Leveon\Connector\Models;
 
+use Exception;
+
 class PricesPacker extends APacker{
 	
 	#prop newProductPrices vgS aprot
@@ -12,8 +14,13 @@ class PricesPacker extends APacker{
 	protected $newOfferPrices = [];
 	#prop oldOfferPrices vgS aprot
 	protected $oldOfferPrices = [];
-		
-	public function add($value){
+
+    /**
+     * @param $value
+     * @return $this
+     * @throws Exception
+     */
+    public function add($value){
 		if($value instanceof ProductPrice){
 			$this->newProductPrices[] = $value;
 			return $this;
@@ -30,16 +37,21 @@ class PricesPacker extends APacker{
 			$this->oldOfferPrices[] = $value;
 			return $this;
 		}
-		throw new \Exception('Unknown value');
+		throw new Exception('Unknown value');
 	}
-	
-		
-	public function toJSON($rules = []){
+
+
+    /**
+     * @param array $rules
+     * @return array|null
+     * @throws Exception
+     */
+    public function toJSON($rules = []){
 		if(!isset($rules['type'])){
-			throw new \Exception('Type not given');
+			throw new Exception('Type not given');
 		}
 		if(!isset($rules['delete'])){
-			throw new \Exception('Delete not specified');
+			throw new Exception('Delete not specified');
 		}
 		$del = !!$rules['delete'];
 		switch($rules['type']){
@@ -57,7 +69,7 @@ class PricesPacker extends APacker{
 					return $this->pack($this->newOfferPrices, OfferPrice::class);
 				}
 				break;
-			default: throw new \Exception("Wrong type: {$rules['type']}");
+			default: throw new Exception("Wrong type: {$rules['type']}");
 		}
 	}
 	

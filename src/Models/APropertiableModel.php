@@ -7,7 +7,7 @@ abstract class APropertiableModel extends AModel{
 	#prop properties vgs aprot
 	protected $properties = [];
 
-	protected static $lists = [
+	protected static array $lists = [
 		'properties' => PropertyValue::class
 	];	
 	

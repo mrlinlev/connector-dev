@@ -22,7 +22,7 @@ class Property extends AModel{
         'type',
     ];
 	
-	protected static $lists = [
+	protected static array $lists = [
 		'scheme' => PropertyTuning::class
 	];
 	

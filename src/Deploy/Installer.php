@@ -2,8 +2,6 @@
 
 namespace Leveon\Connector\Deploy;
 
-
-
 use Composer\Factory;
 
 class Installer
@@ -18,5 +16,10 @@ class Installer
         if(!file_exists($leveonConfigFile))
             copy(__DIR__.DIRECTORY_SEPARATOR."..".DIRECTORY_SEPARATOR.'leveon.config.example.php', $leveonConfigFile);
         echo "Installed\n";
+    }
+
+    public static function Update(): void{
+        echo "Updating...\n";
+        echo "Updated\n";
     }
 }

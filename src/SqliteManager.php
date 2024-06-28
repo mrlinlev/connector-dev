@@ -172,17 +172,17 @@ class SqliteManager{
 
     private function isMigrationApplied($name): bool
     {
-        return $this->val('SELECT name FROM migrations  WHERE name = ?', [["s" => $name]])===$name;
+        return $this->val('SELECT name FROM migrations  WHERE name = ?', ["s" => $name])===$name;
     }
 
     private function markMigrationApplied($name): void
     {
-        $this->exec('INSERT INTO migrations (name, applied) VALUES(?, ?)', [["s" => $name], ["s" => date('Y-m-d H:i:s')]]);
+        $this->exec('INSERT INTO migrations (name, applied) VALUES(?, ?)', ["s" => $name], ["s" => date('Y-m-d H:i:s')]);
     }
 
     private function markMigrationRolledBack($name): void
     {
-        $this->exec('DELETE FROM migrations WHERE name = ?', [["s" => $name]]);
+        $this->exec('DELETE FROM migrations WHERE name = ?', ["s" => $name]);
     }
 
     public function upMigration(string $migrationName): void {

@@ -61,7 +61,7 @@ class Installer
     }
 
     protected static function copyConfig(): void {
-        if(file_exists(self::getPath("config", "leveon.config.example.php"))) return;
+        if(file_exists(self::getPath("config", "leveon.php"))) return;
         echo "Copying config file...\n";
         if (copy(self::localPath("leveon.config.example.php"), self::getPath("config", "leveon.php")) === false) {
             die("Could not copy config config file\n");

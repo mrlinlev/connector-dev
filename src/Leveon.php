@@ -3,7 +3,7 @@
 namespace Leveon\Connector;
 
 use Composer\Factory;
-use Exception;
+use Leveon\Connector\Exceptions\ConfigurationException;
 
 class Leveon
 {
@@ -12,14 +12,14 @@ class Leveon
 
     /**
      * @return void
-     * @throws Exception
+     * @throws ConfigurationException
      */
     private static function loadConfig(): void
     {
         if(self::$config === null) {
             self::$rootDir = dirname(Factory::getComposerFile());
             if (!file_exists(self::$rootDir . DIRECTORY_SEPARATOR . "config" . DIRECTORY_SEPARATOR . "leveon.php")) {
-                throw new Exception("Leveon configuration file does not exist");
+                throw new ConfigurationException("Leveon configuration file does not exist");
             }
             self::$config = require self::$rootDir . DIRECTORY_SEPARATOR . "config" . DIRECTORY_SEPARATOR . "leveon.php";
         }
@@ -29,7 +29,7 @@ class Leveon
      * @param null $key
      * @param null $default
      * @return mixed
-     * @throws Exception
+     * @throws ConfigurationException
      */
     public static function getConfig($key = null, $default = null): mixed
     {
@@ -38,13 +38,26 @@ class Leveon
     }
 
     /**
-     * @throws Exception
+     * @param string $key
+     * @return mixed
+     * @throws ConfigurationException
+     */
+    public static function requireConfig(string $key): mixed
+    {
+        self::loadConfig();
+        if(isset(self::$config[$key])) return self::$config[$key];
+        else throw new ConfigurationException("Leveon configuration file does not defines value for key '$key'");
+    }
+
+    /**
+     * @return string
+     * @throws ConfigurationException
      */
     public static function getDbPath(): string
     {
         self::loadConfig();
         if(!isset(self::$config['db'])) {
-            throw new Exception("Leveon database path not defined");
+            throw new ConfigurationException("Leveon database path not defined");
         }
         return str_replace('@', self::$rootDir, self::$config["db"]);
     }

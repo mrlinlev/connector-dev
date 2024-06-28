@@ -2,19 +2,33 @@
 
 namespace Leveon\Connector\Migrations;
 
+use Leveon\Connector\Exceptions\CodeException;
+use Leveon\Connector\Exceptions\DBException;
+use Leveon\Connector\SqliteManager;
 use Leveon\Connector\Util\AMigration;
-use SQLite3;
 
 class Migration20240521136 extends AMigration{
 
-    public function up(SQLite3 $sqlite): void
+    /**
+     * @param SqliteManager $sqlite
+     * @return void
+     * @throws CodeException
+     * @throws DBException
+     */
+    public function up(SqliteManager $sqlite): void
     {
-        $sqlite->query("CREATE TABLE versions (thread TEXT PRIMARY KEY, version TEXT UNIQUE)");
+        $sqlite->exec("CREATE TABLE versions (thread TEXT PRIMARY KEY, version TEXT UNIQUE)");
     }
 
-    public function down(SQLite3 $sqlite): void
+    /**
+     * @param SqliteManager $sqlite
+     * @return void
+     * @throws CodeException
+     * @throws DBException
+     */
+    public function down(SqliteManager $sqlite): void
     {
-        $sqlite->query("DROP TABLE IF EXISTS versions");
+        $sqlite->exec("DROP TABLE IF EXISTS versions");
     }
 
 }

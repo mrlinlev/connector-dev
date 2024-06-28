@@ -6,21 +6,21 @@ namespace Leveon\Connector\Models;
 
 class APropertyValue extends AModel{
 
-    protected $property;
+    protected int $property;
 
     /**
-     * @return mixed
+     * @return int
      */
-    public function getProperty()
+    public function getProperty(): int
     {
         return $this->property;
     }
 
     /**
-     * @param mixed $property
+     * @param int $property
      * @return APropertyValue
      */
-    public function setProperty($property)
+    public function setProperty(int $property): static
     {
         $this->property = $property;
         return $this;

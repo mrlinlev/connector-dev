@@ -4,13 +4,15 @@ namespace Leveon\Connector\Models;
 
 abstract class APacker{
 	
-	public static function New(){
+	public static function New(): static
+    {
 		return new static();
 	}
 	
 	abstract function toJSON($rules = []);
 	
-	protected function pack($list, $class){
+	protected function pack($list, $class): ?array
+    {
 		if(count($list)===0) return null;
 		$compress = [];
 		$left = $class::$compressable;

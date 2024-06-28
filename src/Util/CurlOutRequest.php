@@ -5,7 +5,7 @@ namespace Leveon\Connector\Util;
 
 class CurlOutRequest
 {
-    private $ch;
+    private static $ch;
     private string $_url;
     private string $_method = "GET";
     private $_data;
@@ -13,9 +13,6 @@ class CurlOutRequest
     private bool $_ssl = false;
     private string $_host;
     private array $_headers = [];
-    private $response;
-    private $responseCode;
-    private $responseHeaders;
 
     public function __construct($url = null)
     {
@@ -40,36 +37,35 @@ class CurlOutRequest
             ->data($data);
     }
 
-    public function resetConnection(): static
+    public static function resetConnection(): void
     {
-        $this->ch = null;
-        return $this;
+        self::$ch = null;
     }
 
-    public function do(): static
+    public function do(): CurlOutResponse
     {
-        if($this->ch===null) $this->ch = curl_init();
-        else curl_reset($this->ch);
-        $protocol = $this->_ssl ? "https://" : "http://";
+        if(self::$ch===null) self::$ch = curl_init();
+        else curl_reset(self::$ch);
+        $protocol = $this->_ssl ? "https" : "http";
         $qs = $this->_query ? '?' . http_build_query($this->_query) : '';
-        $url = $protocol . $this->_host . $this->_url . $qs;
-        curl_setopt($this->ch, CURLOPT_URL, $url);
-        curl_setopt_array($this->ch, $this->defaults());
+        $url = $protocol . '://' . $this->_host . $this->_url . $qs;
+        curl_setopt(self::$ch, CURLOPT_URL, $url);
+        curl_setopt_array(self::$ch, $this->defaults());
         if ($this->_ssl) {
-            curl_setopt_array($this->ch, [
+            curl_setopt_array(self::$ch, [
                 CURLOPT_SSL_VERIFYHOST => 0,
                 CURLOPT_SSL_VERIFYPEER => false,
                 CURLOPT_VERBOSE => 1
             ]);
         }
         if ($this->_method === "POST") {
-            curl_setopt_array($this->ch, [
+            curl_setopt_array(self::$ch, [
                 CURLOPT_POST => 1,
                 CURLOPT_POSTFIELDS => $this->_data,
             ]);
         } elseif ($this->_method !== "GET") {
-            curl_setopt($this->ch, CURLOPT_CUSTOMREQUEST, strtoupper($this->_method));
-            curl_setopt_array($this->ch, [
+            curl_setopt(self::$ch, CURLOPT_CUSTOMREQUEST, strtoupper($this->_method));
+            curl_setopt_array(self::$ch, [
                 CURLOPT_POST => 1,
                 CURLOPT_POSTFIELDS => $this->_data,
             ]);
@@ -79,16 +75,9 @@ class CurlOutRequest
             foreach ($this->_headers as $n => $v) {
                 $h[] = "{$n}: {$v}";
             }
-            curl_setopt($this->ch, CURLOPT_HTTPHEADER, $h);
+            curl_setopt(self::$ch, CURLOPT_HTTPHEADER, $h);
         }
-        $response = curl_exec($this->ch);
-        $header_size = curl_getinfo($this->ch, CURLINFO_HEADER_SIZE);
-        $header = substr($response, 0, $header_size);
-        $this->parseHeaders(explode("\n", $header));
-        $this->response = substr($response, $header_size);
-        if (intdiv($this->responseCode, 100) !== 2)
-            var_dump($response);
-        return $this;
+        return CurlOutResponse::Parse(self::$ch, curl_exec(self::$ch));
     }
 
     public function addHeader($name, $value): static
@@ -101,24 +90,6 @@ class CurlOutRequest
     {
         if (isset($this->_headers[$name])) unset($this->_headers[$name]);
         return $this;
-    }
-
-    private function parseHeaders($headers): void
-    {
-        foreach ($headers as $k => $v) {
-            $t = explode(':', $v, 2);
-            if (isset($t[1])) {
-                if (!isset($this->responseHeaders[trim($t[0])]))
-                    $this->responseHeaders[trim($t[0])] = trim($t[1]);
-                else
-                    $this->responseHeaders[trim($t[0])] .= "\n" . trim($t[1]);
-            } else {
-                if (preg_match("#HTTP/[0-9.]+\s+([0-9]+)#", $v, $out)) {
-                    $this->responseCode = intval($out[1]);
-                    $this->responseHeaders = [];
-                }
-            }
-        }
     }
 
     public function ssl(bool $ssl = true): static
@@ -157,11 +128,6 @@ class CurlOutRequest
         return $this;
     }
 
-    public function getResponseHeader($key)
-    {
-        return $this->responseHeaders[$key] ?? null;
-    }
-
     public function get_url(): string
     {
         return $this->_url;
@@ -185,21 +151,6 @@ class CurlOutRequest
     public function get_host(): string
     {
         return $this->_host;
-    }
-
-    public function getResponse()
-    {
-        return $this->response;
-    }
-
-    public function getResponseCode()
-    {
-        return $this->responseCode;
-    }
-
-    public function getResponseHeaders()
-    {
-        return $this->responseHeaders;
     }
 
     private static function defaults(): array

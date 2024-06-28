@@ -2,21 +2,21 @@
 
 namespace Leveon\Connector\Models;
 
-use Exception;
+use Leveon\Connector\Exceptions\CodeException;
 
 class RelationsPacker extends APacker{
 	
-	#prop newRelations vgS aprot
-	protected $newRelations = [];
-	#prop oldRelations vgS aprot
-	protected $oldRelations = [];
+	protected array $newRelations = [];
+	protected array $oldRelations = [];
 	
-	public function add($relation){
+	public function add($relation): static
+    {
 		$this->newRelations[] = $relation;
 		return $this;
 	}
 	
-	public function delete($relation){
+	public function delete($relation): static
+    {
 		$this->oldRelations[] = $relation;
 		return $this;
 	}
@@ -24,22 +24,16 @@ class RelationsPacker extends APacker{
     /**
      * @param array $rules
      * @return array|null
-     * @throws Exception
+     * @throws CodeException
      */
-    public function toJSON($rules = []){
+    public function toJSON($rules = []): ?array
+    {
 		if(in_array('new', $rules)){
 			return $this->pack($this->newRelations, Relation::class);
 		}
 		if(in_array('old', $rules)){
 			return $this->pack($this->oldRelations, Relation::class);
 		}
-		throw new Exception("Wrong args: ".implode(', ', $rules));
+		throw new CodeException("Wrong args: ".implode(', ', $rules));
 	}
-	
-	
-	#gen - begin
-	public function getNewRelations(){ return $this->newRelations; }
-	public function getOldRelations(){ return $this->oldRelations; }
-
-	#gen - end
 }

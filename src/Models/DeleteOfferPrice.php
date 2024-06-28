@@ -2,17 +2,17 @@
 
 namespace Leveon\Connector\Models;
 
-class DeleteOfferPrice extends ADeletePrice{
-	
-	#prop offer vgs aprot
-	protected $offer;
-	
-	public static $compressable = [
-		'offer',
-		'priceType',
-	];
-	
-	public static $final = null;
+class DeleteOfferPrice extends ADeletePrice
+{
+
+    protected string $offer;
+
+    public static array $compressable = [
+        'offer',
+        'priceType',
+    ];
+
+    public static ?string $final = null;
 
     protected static array $valueableList = [
         'product',
@@ -20,8 +20,14 @@ class DeleteOfferPrice extends ADeletePrice{
     ];
 
 
-    #gen - begin
-	public function getOffer(){ return $this->offer; }
-	public function setOffer($offer){ $this->offer = $offer; return $this; }
-	#gen - end
+    public function getOffer(): string
+    {
+        return $this->offer;
+    }
+
+    public function setOffer($offer): static
+    {
+        $this->offer = $offer;
+        return $this;
+    }
 }

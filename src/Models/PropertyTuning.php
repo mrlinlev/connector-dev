@@ -2,18 +2,14 @@
 
 namespace Leveon\Connector\Models;
 
-class PropertyTuning extends AModel{
-	
-	#prop defaultValue vgs aprot
-	protected $defaultValue;
-	#prop defaultUnit vgs aprot
-	protected $defaultUnit;
-	#prop unitsGroup vgs aprot
-	protected $unitsGroup;
-	#prop storageUnit vgs aprot
-	protected $storageUnit;
-	#prop displayUnit vgs aprot
-	protected $displayUnit;
+class PropertyTuning extends AModel
+{
+
+    protected mixed $defaultValue;
+    protected ?int $defaultUnit;
+    protected ?int $unitsGroup;
+    protected ?int $storageUnit;
+    protected ?int $displayUnit;
 
     protected static array $valueableList = [
         'defaultValue',
@@ -22,17 +18,59 @@ class PropertyTuning extends AModel{
         'storageUnit',
         'displayUnit',
     ];
-			
-	#gen - begin
-	public function getDefaultValue(){ return $this->defaultValue; }
-	public function setDefaultValue($defaultValue){ $this->defaultValue = $defaultValue; return $this; }
-	public function getDefaultUnit(){ return $this->defaultUnit; }
-	public function setDefaultUnit($defaultUnit){ $this->defaultUnit = $defaultUnit; return $this; }
-	public function getUnitsGroup(){ return $this->unitsGroup; }
-	public function setUnitsGroup($unitsGroup){ $this->unitsGroup = $unitsGroup; return $this; }
-	public function getStorageUnit(){ return $this->storageUnit; }
-	public function setStorageUnit($storageUnit){ $this->storageUnit = $storageUnit; return $this; }
-	public function getDisplayUnit(){ return $this->displayUnit; }
-	public function setDisplayUnit($displayUnit){ $this->displayUnit = $displayUnit; return $this; }
-	#gen - end
+
+    public function getDefaultValue()
+    {
+        return $this->defaultValue;
+    }
+
+    public function setDefaultValue($defaultValue): static
+    {
+        $this->defaultValue = $defaultValue;
+        return $this;
+    }
+
+    public function getDefaultUnit(): ?int
+    {
+        return $this->defaultUnit;
+    }
+
+    public function setDefaultUnit($defaultUnit): static
+    {
+        $this->defaultUnit = $defaultUnit;
+        return $this;
+    }
+
+    public function getUnitsGroup(): ?int
+    {
+        return $this->unitsGroup;
+    }
+
+    public function setUnitsGroup($unitsGroup): static
+    {
+        $this->unitsGroup = $unitsGroup;
+        return $this;
+    }
+
+    public function getStorageUnit(): ?int
+    {
+        return $this->storageUnit;
+    }
+
+    public function setStorageUnit($storageUnit): static
+    {
+        $this->storageUnit = $storageUnit;
+        return $this;
+    }
+
+    public function getDisplayUnit(): ?int
+    {
+        return $this->displayUnit;
+    }
+
+    public function setDisplayUnit($displayUnit): static
+    {
+        $this->displayUnit = $displayUnit;
+        return $this;
+    }
 }

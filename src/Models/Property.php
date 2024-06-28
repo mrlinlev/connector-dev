@@ -2,18 +2,14 @@
 
 namespace Leveon\Connector\Models;
 
-class Property extends AModel{
-	
-	#prop title vgs aprot
-	protected $title;
-	#prop options vgs aprot
-	protected $options;
-	#prop multiple vgs aprot
-	protected $multiple;
-	#prop type vgs aprot
-	protected $type;
-	#prop scheme vgs aprot
-	protected $scheme;
+class Property extends AModel
+{
+
+    protected string $title;
+    protected bool $options;
+    protected bool $multiple;
+    protected int $type;
+    protected array $scheme;
 
     protected static array $valueableList = [
         'title',
@@ -21,21 +17,64 @@ class Property extends AModel{
         'multiple',
         'type',
     ];
-	
-	protected static array $lists = [
-		'scheme' => PropertyTuning::class
-	];
-	
-	#gen - begin
-	public function getTitle(){ return $this->title; }
-	public function setTitle($title){ $this->title = $title; return $this; }
-	public function getOptions(){ return $this->options; }
-	public function setOptions($options){ $this->options = $options; return $this; }
-	public function getMultiple(){ return $this->multiple; }
-	public function setMultiple($multiple){ $this->multiple = $multiple; return $this; }
-	public function getType(){ return $this->type; }
-	public function setType($type){ $this->type = $type; return $this; }
-	public function getScheme(){ return $this->scheme; }
-	public function setScheme($scheme){ $this->scheme = $scheme; return $this; }
-	#gen - end
+
+    protected static array $lists = [
+        'scheme' => PropertyTuning::class
+    ];
+
+    public function getTitle(): string
+    {
+        return $this->title;
+    }
+
+    public function setTitle($title): static
+    {
+        $this->title = $title;
+        return $this;
+    }
+
+    public function getOptions(): bool
+    {
+        return $this->options;
+    }
+
+    public function setOptions($options): static
+    {
+        $this->options = $options;
+        return $this;
+    }
+
+    public function getMultiple(): bool
+    {
+        return $this->multiple;
+    }
+
+    public function setMultiple($multiple): static
+    {
+        $this->multiple = $multiple;
+        return $this;
+    }
+
+    public function getType(): int
+    {
+        return $this->type;
+    }
+
+    public function setType($type): static
+    {
+        $this->type = $type;
+        return $this;
+    }
+
+    public function getScheme(): array
+    {
+        return $this->scheme;
+    }
+
+    public function setScheme($scheme): static
+    {
+        $this->scheme = $scheme;
+        return $this;
+    }
+
 }

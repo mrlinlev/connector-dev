@@ -2,7 +2,7 @@
 
 namespace Leveon\Connector\Models;
 
-use Exception;
+use Leveon\Connector\Exceptions\CodeException;
 
 abstract class AModel{
 
@@ -26,21 +26,24 @@ abstract class AModel{
 		}
 	}
 
-	public static function New($info = null){
-		return new static($info = null);
+	public static function New($info = null): static
+    {
+		return new static($info);
 	}
 
     /**
      * @param $key
      * @return mixed
-     * @throws Exception
+     * @throws CodeException
      */
-    public function val($key){
+    public function val($key): mixed
+    {
 		if(isset($this->{$key})) return $this->{$key};
-		throw new Exception("Unknown field {$key} in class ".static::class);
+		throw new CodeException("Unknown field {$key} in class ".static::class);
 	}
 
-	protected function fieldsToJson($fields){
+	protected function fieldsToJson($fields): array
+    {
 		$result = [];
 		foreach($fields as $field){
 			if($this->{$field} instanceof AModel)
@@ -51,7 +54,8 @@ abstract class AModel{
 		return $result;
 	}
 
-	public function toJSON($rules = []){
+	public function toJSON($rules = []): object
+    {
 		$pack = [];
 		foreach(static::$valueableList as $item){
 			if($this->{$item}!==null) $pack[] = $item;
@@ -68,14 +72,16 @@ abstract class AModel{
 		return (object)$result;
 	}
 
-	public static function LoadList($array, $pre = [], $post = []){
+	public static function LoadList($array, $pre = [], $post = []): array
+    {
 		return array_map(function($p)use($pre, $post){
 			$args = [...$pre, $p, ...$post];
 			return new static(...$args); 
 		}, $array);
 	}
 	
-	public static function LoadAssocList($array, $pre = [], $post = []){
+	public static function LoadAssocList($array, $pre = [], $post = []): array
+    {
 	  $result = [];
 	  foreach ($array as $key=>$p){
 	    $args = [...$pre, $p, ...$post];
@@ -89,16 +95,18 @@ abstract class AModel{
 		return array_map(function($p){ return $p->toJSON(); }, $list); 
 	}
 	
-	protected function loadField($info, $field, $default = null){
+	protected function loadField($info, $field, $default = null): static
+    {
 		if(is_array($info)){
-			$this->{$field} = isset($info[$field])? $info[$field]: $default;
+			$this->{$field} = $info[$field] ?? $default;
 		}else{
-			$this->{$field} = isset($info->{$field})? $info->{$field}: $default;
+			$this->{$field} = $info->{$field} ?? $default;
 		}
 		return $this;
 	}
 	
-	protected function loadPresentedField($info, $field){
+	protected function loadPresentedField($info, $field): static
+    {
 		if(is_array($info) && isset($info[$field])){
 			$this->{$field} = $info[$field];
 		}elseif(isset($info->{$field})){
@@ -109,19 +117,21 @@ abstract class AModel{
 	
 	protected static function GetField($info, $field, $default = null){
 		if(is_array($info)){
-			return isset($info[$field])? $info[$field]: $default;
+			return $info[$field] ?? $default;
 		}else{
-			return isset($info->{$field})? $info->{$field}: $default;
+			return $info->{$field} ?? $default;
 		}
 	}
 	
-	protected function loadFields($info, $fields, $default = null){
+	protected function loadFields($info, $fields, $default = null): static
+    {
 		foreach($fields as $field)
 			$this->loadField($info, $field, $default);
 		return $this;
 	}
 	
-	protected function loadPresentedFields($info, $fields){
+	protected function loadPresentedFields($info, $fields): static
+    {
 		foreach($fields as $field)
 			$this->loadPresentedField($info, $field);
 		return $this;

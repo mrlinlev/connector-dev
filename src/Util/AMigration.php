@@ -1,13 +1,11 @@
 <?php
 
-
 namespace Leveon\Connector\Util;
 
-
-use SQLite3;
+use Leveon\Connector\SqliteManager;
 
 abstract class AMigration
 {
-    abstract public function up(SQLite3 $sqlite): void;
-    public function down(SQLite3 $sqlite): void {}
+    abstract public function up(SqliteManager $sqlite): void;
+    public function down(SqliteManager $sqlite): void {}
 }

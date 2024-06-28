@@ -2,16 +2,21 @@
 
 namespace Leveon\Connector\Models;
 
-abstract class APropertiableModel extends AModel{
+abstract class AModelWithProperties extends AModel{
 	
-	#prop properties vgs aprot
 	protected $properties = [];
 
 	protected static array $lists = [
-		'properties' => PropertyValue::class
-	];	
-	
-	public function setProperty($property, $value){
+		'properties' => APropertyValue::class
+	];
+
+    /**
+     * @param int $property
+     * @param $value
+     * @return $this
+     */
+    public function setProperty(int $property, $value): static
+    {
 		$this->properties[] = (is_array($value)? MultiPropertyValue::New(): SinglePropertyValue::New())
 			->setProperty($property)
 			->setValue($value);

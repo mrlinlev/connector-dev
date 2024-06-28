@@ -2,7 +2,7 @@
 
 namespace Leveon\Connector\Models;
 
-class Product extends APropertiableModel{
+class Product extends AModelWithProperties{
 	
 	#prop title vgs aprot
 	protected $title;

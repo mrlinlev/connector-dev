@@ -2,46 +2,78 @@
 
 namespace Leveon\Connector;
 
+use Leveon\Connector\Exceptions\ConfigurationException;
 use Leveon\Connector\Util\CurlOutRequest;
+use Leveon\Connector\Util\CurlOutResponse;
 
 class Connector{
-	
-	protected array $params;
-	
-	public function __construct(){
-		$this->params = require(__DIR__.'/config.php');
-	}
-	
-	public function request($url, $method = 'GET'){
+
+    /**
+     * @param string $url
+     * @param string $method
+     * @return CurlOutRequest
+     * @throws ConfigurationException
+     */
+    public function request(string $url, string $method = 'GET'): CurlOutRequest
+    {
 		return CurlOutRequest::New($url)
 			->method($method)
-			->host($this->params['host'])
-			->ssl($this->params['ssl'])
-			->addHeader('X-API-KEY', $this->params['key'])
+			->host(Leveon::getConfig('host', 'api.cds.leveon.ru'))
+			->ssl(Leveon::getConfig('ssl', true))
+			->addHeader('X-API-KEY', Leveon::requireConfig('key'))
 			->addHeader('content-type', 'application/json');
 	}
-	
-	public function get($url): CurlOutRequest
+
+    /**
+     * @param string $url
+     * @return CurlOutRequest
+     * @throws ConfigurationException
+     */
+    public function get(string $url): CurlOutRequest
     {
 		return $this->request($url);
 	}
-	
-	public function post($url, $data = null): CurlOutRequest{
+
+    /**
+     * @param string $url
+     * @param $data
+     * @return CurlOutRequest
+     * @throws ConfigurationException
+     */
+    public function post(string $url, $data = null): CurlOutRequest{
 		$req = $this->request($url, "POST");
 		return $data!==null? $req->data(json_encode($data)): $req;
 	}
-	
-	public function patch($url, $data = null): CurlOutRequest{
+
+    /**
+     * @param string $url
+     * @param $data
+     * @return CurlOutRequest
+     * @throws ConfigurationException
+     */
+    public function patch(string $url, $data = null): CurlOutRequest{
 		$req = $this->request($url, "PATCH");
 		return $data!==null? $req->data(json_encode($data)): $req;
 	}
-	
-	public function put($url, $data = null): CurlOutRequest{
+
+    /**
+     * @param string $url
+     * @param $data
+     * @return CurlOutRequest
+     * @throws ConfigurationException
+     */
+    public function put(string $url, $data = null): CurlOutRequest{
 		$req = $this->request($url, "PUT");
 		return $data!==null? $req->data(json_encode($data)): $req;
 	}
-	
-	public function delete($url, $data = null): CurlOutRequest{
+
+    /**
+     * @param string $url
+     * @param $data
+     * @return CurlOutRequest
+     * @throws ConfigurationException
+     */
+    public function delete(string $url, $data = null): CurlOutRequest{
 		$req = $this->request($url, "DELETE");
 		return $data!==null? $req->data(json_encode($data)): $req;
 	}
@@ -50,8 +82,9 @@ class Connector{
      * Подписание и отправка запроса к апи
      * @param CurlOutRequest $req
      * @return CurlOutRequest
+     * @throws ConfigurationException
      */
-    public function process(CurlOutRequest $req): CurlOutRequest
+    public function process(CurlOutRequest $req): CurlOutResponse
     {
 		$fullUrl = $req->get_url();
 		if($req->get_query()){
@@ -59,7 +92,7 @@ class Connector{
 		}
 		$time = strtotime('now')*1000;
 		$imp = [
-			$this->params['signKey'],
+            Leveon::requireConfig('signKey'),
 			$fullUrl,
 			$time
 		]; 

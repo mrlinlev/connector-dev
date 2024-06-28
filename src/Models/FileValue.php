@@ -2,34 +2,46 @@
 
 namespace Leveon\Connector\Models;
 
-class FileValue extends AModel {
-	
-	#prop file vgs aprot
-	protected $file;
-	#prop title vgs aprot
-	protected $title;
+class FileValue extends AValue
+{
+
+    protected string $file;
+    protected ?string $title;
 
     protected static array $valueableList = ['file', 'title'];
-	
-	public static function Url($file, $ext = null, $title = null){
-		$ext = $ext===null? '': $ext;
-		return (new static())
-			->setFile("url:{$ext}:{$file}")
-			->setTitle($title);
-	}
-	
-	public static function B64($file, $ext = null, $title = null){
-		$file = base64_encode($file);
-		return (new static())
-			->setFile("url:{$ext}:{$file}")
-			->setTitle($title);
-	}
-	
-	#gen - begin
-	public function getFile(){ return $this->file; }
-	public function setFile($file){ $this->file = $file; return $this; }
-	public function getTitle(){ return $this->title; }
-	public function setTitle($title){ $this->title = $title; return $this; }
-	#gen - end
-	
+
+    public static function Url(string $file, ?string $ext = null, ?string $title = null): FileValue
+    {
+        $ext = $ext === null ? '' : $ext;
+        return (new static())->setFile("url:$ext:$file")->setTitle($title);
+    }
+
+    public static function B64(string $file, string $ext, ?string $title = null): FileValue
+    {
+        $file = base64_encode($file);
+        return (new static())->setFile("url:$ext:$file")->setTitle($title);
+    }
+
+    public function getFile(): string
+    {
+        return $this->file;
+    }
+
+    public function setFile($file): static
+    {
+        $this->file = $file;
+        return $this;
+    }
+
+    public function getTitle(): string
+    {
+        return $this->title;
+    }
+
+    public function setTitle($title): static
+    {
+        $this->title = $title;
+        return $this;
+    }
+
 }

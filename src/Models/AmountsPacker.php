@@ -2,82 +2,45 @@
 
 namespace Leveon\Connector\Models;
 
-use Exception;
+use Leveon\Connector\Exceptions\CodeException;
+use Leveon\Connector\Exceptions\DataException;
 
 class AmountsPacker extends APacker{
 	
-	#prop newProductAmounts vgS aprot
-	protected $newProductAmounts = [];
-	#prop oldProductAmounts vgS aprot
-	protected $oldProductAmounts = [];
-	#prop newOfferAmounts vgS aprot
-	protected $newOfferAmounts = [];
-	#prop oldOfferAmounts vgS aprot
-	protected $oldOfferAmounts = [];
+	protected array $newAmounts = [];
+	protected array $oldAmounts = [];
 
     /**
      * @param $value
      * @return $this
-     * @throws Exception
+     * @throws DataException
      */
-    public function add($value){
-		if($value instanceof ProductAmount){
-			$this->newProductAmounts[] = $value;
-			return $this;
-		}
+    public function add($value): static
+    {
 		if($value instanceof OfferAmount){
-			$this->newOfferAmounts[] = $value;
-			return $this;
-		}
-		if($value instanceof DeleteProductAmount){
-			$this->oldProductAmounts[] = $value;
+			$this->newAmounts[] = $value;
 			return $this;
 		}
 		if($value instanceof DeleteOfferAmount){
-			$this->oldOfferAmounts[] = $value;
+			$this->oldAmounts[] = $value;
 			return $this;
 		}
-		throw new Exception('Unknown value');
+		throw new DataException('Unknown value');
 	}
 
 
     /**
      * @param array $rules
      * @return array|null
-     * @throws Exception
+     * @throws CodeException
      */
-    public function toJSON($rules = []){
-		if(!isset($rules['type'])){
-			throw new Exception('Type not given');
-		}
+    public function toJSON($rules = []): ?array
+    {
 		if(!isset($rules['delete'])){
-			throw new Exception('Delete not specified');
+			throw new CodeException('Delete not specified');
 		}
-		$del = !!$rules['delete'];
-		switch($rules['type']){
-			case 'product':
-				if($del){
-					return $this->pack($this->oldProductAmounts, DeleteProductAmount::class);
-				}else{
-					return $this->pack($this->newProductAmounts, ProductAmount::class);
-				}
-				break;
-			case 'offer':
-				if($del){
-					return $this->pack($this->oldOfferAmounts, DeleteOfferAmount::class);
-				}else{
-					return $this->pack($this->newOfferAmounts, OfferAmount::class);
-				}
-				break;
-			default: throw new Exception("Wrong type: {$rules['type']}");
-		}
+        return !!$rules['delete']
+            ? $this->pack($this->oldAmounts, DeleteOfferAmount::class)
+            : $this->pack($this->newAmounts, OfferAmount::class);
 	}
-	
-	#gen - begin
-	public function getNewProductAmounts(){ return $this->newProductAmounts; }
-	public function getOldProductAmounts(){ return $this->oldProductAmounts; }
-	public function getNewOfferAmounts(){ return $this->newOfferAmounts; }
-	public function getOldOfferAmounts(){ return $this->oldOfferAmounts; }
-
-	#gen - end
 }

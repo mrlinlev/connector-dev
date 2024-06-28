@@ -2,16 +2,25 @@
 
 namespace Leveon\Connector\Models;
 
-class MultiPropertyValue extends APropertyValue{
-	
-	protected $value;
+class MultiPropertyValue extends APropertyValue
+{
+
+    protected array $value;
 
     protected static array $valueableList = ['property'];
     protected static array $lists = [
         'value' => AModel::class
     ];
-	
-	
-	public function getValue(){ return $this->value; }
-	public function setValue($value){ $this->value = $value; return $this; }
+
+
+    public function getValue(): array
+    {
+        return $this->value;
+    }
+
+    public function setValue(array $value): static
+    {
+        $this->value = $value;
+        return $this;
+    }
 }

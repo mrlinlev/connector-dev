@@ -26,13 +26,7 @@ class SqliteManager{
 	private function init(): void
     {
 		$this->sqlite = new SQLite3($this->path);
-		$this->exec('CREATE TABLE migrations (name string PRIMARY KEY, applied DATE)');
-		$this->exec('CREATE TABLE brands (outer INT PRIMARY KEY, local TEXT UNIQUE)');
-		$this->exec('CREATE TABLE collections (outer INT PRIMARY KEY, local TEXT UNIQUE)');
-		$this->exec('CREATE TABLE types (outer INT PRIMARY KEY, local TEXT UNIQUE)');
-		$this->exec('CREATE TABLE properties (outer INT PRIMARY KEY, local TEXT UNIQUE)');
-		$this->exec('CREATE TABLE products (outer TEXT PRIMARY KEY, local TEXT UNIQUE)');
-		$this->exec('CREATE TABLE offers (outer TEXT PRIMARY KEY, local TEXT UNIQUE)');
+		$this->exec('CREATE TABLE migrations (name string PRIMARY KEY, applied TEXT)');
 		$this->close();
 	}
 
@@ -175,6 +169,53 @@ class SqliteManager{
 		}
         return $stmt->getSql(true);
 	}
+
+    private function isMigrationApplied($name): bool
+    {
+        return $this->val('SELECT name FROM migrations  WHERE name = ?', [$name])===$name;
+    }
+
+    private function markMigrationApplied($name): void
+    {
+        $this->exec('INSERT INTO migrations (name, applied) VALUES(?, ?)', [$name, date('Y-m-d H:i:s')]);
+    }
+
+    private function markMigrationRolledBack($name): void
+    {
+        $this->exec('DELETE FROM migrations WHERE name = ?', [$name]);
+    }
+
+    public function upMigration(string $migrationName): void {
+        if ($this->isMigrationApplied($migrationName)) return;
+        echo "Applying migration $migrationName...\n";
+        $migrationClass = "Leveon\\Connector\\Migrations\\$migrationName";
+        $migration = new $migrationClass();
+        $this->sqlite->exec('BEGIN');
+        try {
+            $migration->up($this->sqlite);
+            $this->markMigrationApplied($migrationName);
+            $this->sqlite->exec('COMMIT');
+        }catch (Exception $e){
+            var_dump($e->getMessage());
+            $this->sqlite->exec('ROLLBACK');
+        }
+    }
+
+    public function downMigration(string $migrationName): void {
+        if (!$this->isMigrationApplied($migrationName)) return;
+        echo "Rolling back migration $migrationName...\n";
+        $migrationClass = "Leveon\\Connector\\Migrations\\$migrationName";
+        $migration = new $migrationClass();
+        $this->sqlite->exec('BEGIN');
+        try {
+            $migration->down($this->sqlite);
+            $this->markMigrationRolledBack($migrationName);
+            $this->sqlite->exec('COMMIT');
+        }catch (Exception $e){
+            var_dump($e->getMessage());
+            $this->sqlite->exec('ROLLBACK');
+        }
+    }
 
 	public function getPath(): string
     {

@@ -23,6 +23,13 @@ class Installer
         echo "Leveon connector installed\n";
     }
 
+    public static function Migrate(): void
+    {
+        echo "Migrating lo latest db version...\n";
+        self::makeDb();
+        echo "Migrating lo latest db version completed\n";
+    }
+
     protected static function makeDirs(): void
     {
         foreach (self::$directories as $directory) {
@@ -62,7 +69,11 @@ class Installer
     }
     protected static function makeDb(): void {
         $manager = new SqliteManager();
-        // todo: check and apply migrations
+        foreach (scandir(self::localPath("Migrations")) as $file) {
+            if(preg_match('/^(Migration\d+)\._php$/', $file, $m)) {
+                $manager->upMigration($m[1]);
+            }
+        }
         $manager->close();
     }
 }

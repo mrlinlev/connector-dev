@@ -71,7 +71,7 @@ class Installer
         $manager = new SqliteManager();
         foreach (scandir(self::localPath("Migrations")) as $file) {
             $file = basename($file);
-            if(preg_match('/^(Migration\\d+)\\._php$/', $file, $m)) {
+            if(preg_match('/^(Migration\d+)\.php$/', $file, $m)) {
                 $manager->upMigration($m[1]);
             }
         }

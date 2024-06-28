@@ -152,15 +152,16 @@ class SqliteManager{
 						case 'i':
 							$stmt->bindValue($i+1, $value, SQLITE3_INTEGER);
 							break;
-						case 's':
-							$stmt->bindValue($i+1, $value);
-							break;
 						case 'f':
 							$stmt->bindValue($i+1, $value, SQLITE3_FLOAT);
 							break;
 						case 'n':
 							$stmt->bindValue($i+1, $value, SQLITE3_NULL);
 							break;
+                        case 's':
+                        default:
+                            $stmt->bindValue($i+1, $value);
+                            break;
 					}
 				}
 			}else{

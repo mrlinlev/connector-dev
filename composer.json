@@ -5,7 +5,8 @@
     "license": "Apache-2.0",
     "version": "0.1.8",
     "scripts": {
-        "post-install-cmd": "Leveon\\Connector\\Deploy\\Installer::Install"
+        "post-install-cmd": "Leveon\\Connector\\Deploy\\Installer::Install",
+        "post-update-cmd":  "Leveon\\Connector\\Deploy\\Installer::Install"
     },
     "autoload": {
         "psr-4": {

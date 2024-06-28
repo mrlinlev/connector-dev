@@ -69,8 +69,9 @@ class Installer
     }
     protected static function makeDb(): void {
         $manager = new SqliteManager();
+        var_dump(self::localPath("Migrations"));
         foreach (scandir(self::localPath("Migrations")) as $file) {
-            if(preg_match('/^(Migration\d+)\._php$/', $file, $m)) {
+            if(preg_match('/^(Migration\\d+)\\._php$/', $file, $m)) {
                 $manager->upMigration($m[1]);
             }
         }

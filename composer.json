@@ -5,8 +5,8 @@
     "license": "Apache-2.0",
     "version": "0.1.8",
     "scripts": {
-        "post-package-install":  "Leveon\\Connector\\Deploy\\Installer::Install",
-        "post-package-update":  "Leveon\\Connector\\Deploy\\Installer::Update",
+        "post-package-install":  "Leveon\\Connector\\Deploy\\Installer::PkgInstall",
+        "post-package-update":  "Leveon\\Connector\\Deploy\\Installer::PkgUpdate",
         "post-install-cmd":  "Leveon\\Connector\\Deploy\\Installer::Install",
         "post-update-cmd":  "Leveon\\Connector\\Deploy\\Installer::Update"
     },

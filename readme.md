@@ -31,3 +31,19 @@ After first installation, when you have added `scripts` to `composer.json` manua
 ```
 composer run-script leveon-install
 ```
+When this command completed, next structure will be created in your project
+```
+[project dir]
+├╴config
+│  └╴leveon.php
+└╴data
+  └╴leveon
+    └╴connector.sqlite
+    └╴connector.sqlite-shm
+    └╴connector.sqlite-wal
+```
+In file `config/leveon.config.php` you should define your access tokens which can be obtained in your [personal account][acc]
+* `key`
+* `signKey`
+
+[acc]: https://cds.leveon.ru/cabinet/settings/api-keys "Go to Leveon website"

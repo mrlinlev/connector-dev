@@ -6,8 +6,7 @@ use Leveon\Connector\Util\CurlOutRequest;
 
 class Connector{
 	
-	#prop params vGS aprot
-	protected $params;
+	protected array $params;
 	
 	public function __construct(){
 		$this->params = require(__DIR__.'/config.php');
@@ -19,41 +18,41 @@ class Connector{
 			->host($this->params['host'])
 			->ssl($this->params['ssl'])
 			->addHeader('X-API-KEY', $this->params['key'])
-			->addHeader('content-type', 'application/json')
-			;
+			->addHeader('content-type', 'application/json');
 	}
 	
-	public function get($url){
+	public function get($url): CurlOutRequest
+    {
 		return $this->request($url);
 	}
 	
-	public function post($url, $data = null){
+	public function post($url, $data = null): CurlOutRequest{
 		$req = $this->request($url, "POST");
 		return $data!==null? $req->data(json_encode($data)): $req;
 	}
 	
-	public function patch($url, $data = null){
+	public function patch($url, $data = null): CurlOutRequest{
 		$req = $this->request($url, "PATCH");
 		return $data!==null? $req->data(json_encode($data)): $req;
 	}
 	
-	public function put($url, $data = null){
+	public function put($url, $data = null): CurlOutRequest{
 		$req = $this->request($url, "PUT");
 		return $data!==null? $req->data(json_encode($data)): $req;
 	}
 	
-	public function delete($url, $data = null){
+	public function delete($url, $data = null): CurlOutRequest{
 		$req = $this->request($url, "DELETE");
 		return $data!==null? $req->data(json_encode($data)): $req;
 	}
-
 
     /**
      * Подписание и отправка запроса к апи
      * @param CurlOutRequest $req
      * @return CurlOutRequest
      */
-    public function process(CurlOutRequest $req){
+    public function process(CurlOutRequest $req): CurlOutRequest
+    {
 		$fullUrl = $req->get_url();
 		if($req->get_query()){
 			$fullUrl .= '?'.http_build_query($req->get_query());
@@ -71,10 +70,4 @@ class Connector{
 			->addHeader('X-SIGN', hash('sha256', implode('-', $imp)))
 			->do();
 	}
-	
-	
-	#gen - begin
-
-
-	#gen - end
 }

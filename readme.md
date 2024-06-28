@@ -21,13 +21,13 @@ Add to your `composer.json` auto updating scripts, which will automatically migr
     "post-package-update":  [
       "@leveon-install"
     ],
-    "post-package-install":  [
+    "post-install-cmd":  [
       "@leveon-install"
     ],
 }
 ```
 
-After first installation manually run 
+After first installation, when you have added `scripts` to `composer.json` manually run 
 ```
 composer run-script leveon-install
 ```

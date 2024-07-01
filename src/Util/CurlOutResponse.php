@@ -10,6 +10,7 @@ class CurlOutResponse
     private array $headers;
     private string $content;
     private bool $successful;
+    private ?stdClass $json;
 
     public function __construct($ch, $response){
         $header_size = curl_getinfo($ch, CURLINFO_HEADER_SIZE);
@@ -83,7 +84,10 @@ class CurlOutResponse
     }
 
     public function json(): stdClass{
-        return json_decode($this->content);
+        if(strlen($this->content)>0 && $this->json === null){
+            $this->json = json_decode($this->content);
+        }
+        return $this->json;
     }
 
 }

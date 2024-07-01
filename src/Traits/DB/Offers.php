@@ -15,27 +15,48 @@ trait Offers
      */
     public function outerOffer($localId): ?string
     {
-        return $this->outerByLocal('offer', $localId);
+        return $this->val('SELECT "outer" FROM brands WHERE local=?', $localId);
     }
 
     /**
-     * @param $outerId
+     * @param string $outerId
      * @return mixed
      * @throws CodeException
      * @throws DBException
      */
-    public function localOffer($outerId): mixed
+    public function localOffer(string $outerId): mixed
     {
-        return $this->localByOuter('offer', $outerId);
+        return $this->val('SELECT local FROM offers WHERE "outer"=?', $outerId);
     }
 
-    public function bind($localId, string $outerId, $localProductId, string $outerProductId): void
+    /**
+     * @param $localId
+     * @param string $outerId
+     * @param $localProductId
+     * @param string $outerProductId
+     * @return void
+     * @throws CodeException
+     * @throws DBException
+     */
+    public function bindOffer($localId, string $outerId, $localProductId, string $outerProductId): void
     {
-        #$this->exec("INSERT INTO offers ("outer", local)");
+        $this->exec(
+            'INSERT INTO offers ("outer", "local", productOuter, productLocal) VALUES (?, ?, ?, ?)',
+            $outerId, $localId, $outerProductId, $localProductId
+        );
     }
 
-    abstract public function localByOuter($type, $outerId);
-    abstract public function outerByLocal($type, $localId);
+    /**
+     * @param string $outerId
+     * @return void
+     * @throws CodeException
+     * @throws DBException
+     */
+    public function unbindOffer(string $outerId): void
+    {
+        $this->exec('DELETE FROM offers WHERE "outer" = ?', $outerId);
+    }
+
     abstract public function val($sql, ...$params): mixed;
     abstract public function exec($sql, ...$params): void;
 }

@@ -3,9 +3,11 @@
 namespace Leveon\Connector\Util;
 
 
+use CurlHandle;
+
 class CurlOutRequest
 {
-    private static $ch;
+    private static ?CurlHandle $ch;
     private string $_url;
     private string $_method = "GET";
     private $_data;
@@ -37,8 +39,9 @@ class CurlOutRequest
             ->data($data);
     }
 
-    public static function resetConnection(): void
+    public static function closeConnection(): void
     {
+        if (self::$ch !== null) curl_close(self::$ch);
         self::$ch = null;
     }
 

@@ -6,12 +6,24 @@ use Exception;
 use Leveon\Connector\Exceptions\CodeException;
 use Leveon\Connector\Exceptions\ConfigurationException;
 use Leveon\Connector\Exceptions\DBException;
+use Leveon\Connector\Traits\DB\Brands;
+use Leveon\Connector\Traits\DB\Collections;
 use Leveon\Connector\Traits\DB\Offers;
+use Leveon\Connector\Traits\DB\Products;
+use Leveon\Connector\Traits\DB\Properties;
+use Leveon\Connector\Traits\DB\Types;
 use SQLite3;
 
 class SqliteManager{
 
     use Offers;
+    use Products;
+    use Brands;
+    use Types;
+    use Collections;
+    use Properties;
+
+    static SqliteManager $instance;
 	private string $path;
 	private SQLite3 $sqlite;
 
@@ -28,6 +40,7 @@ class SqliteManager{
 		$this->sqlite = new SQLite3($this->path);
         $this->sqlC($this->sqlite->busyTimeout(250));
 		$this->sqlC($this->sqlite->exec('PRAGMA journal_mode = wal'));
+        self::$instance = $this;
     }
 
     /**

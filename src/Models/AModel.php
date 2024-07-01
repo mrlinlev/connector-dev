@@ -48,8 +48,9 @@ abstract class AModel{
 		foreach($fields as $field){
 			if($this->{$field} instanceof AModel)
 				$result[$field] = $this->{$field}->toJSON();
-			else
-				$result[$field] = $this->{$field};
+			else if(isset($this->{$field})) {
+                $result[$field] = $this->{$field};
+            }
 		}
 		return $result;
 	}
@@ -57,19 +58,30 @@ abstract class AModel{
 	public function toJSON($rules = []): object
     {
 		$pack = [];
-		foreach(static::$valueableList as $item){
-			if($this->{$item}!==null) $pack[] = $item;
-		}
-		$result = $this->fieldsToJson($pack);
-		foreach(static::$entitiesList as $field => $class){
-			if($this->{$field}!==null)
-				$result[$field] = $this->{$field}->toJSON();
-		}
-		foreach(static::$lists as $field => $class){
-			if($this->{$field}!==null && count($this->{$field})>0)
-				$result[$field] = self::ListToJSON($this->{$field});
-		}
-		return (object)$result;
+        if(!empty($rules)){
+            $result = $this->fieldsToJson($rules);
+            foreach(static::$lists as $field => $class){
+                if(in_array($field, $rules)) {
+                    if ($this->{$field} !== null && count($this->{$field}) > 0) {
+                        $result[$field] = self::ListToJSON($this->{$field});
+                    }
+                }
+            }
+        } else {
+            foreach (static::$valueableList as $item) {
+                if ($this->{$item} !== null) $pack[] = $item;
+            }
+            $result = $this->fieldsToJson($pack);
+            foreach (static::$entitiesList as $field => $class) {
+                if ($this->{$field} !== null)
+                    $result[$field] = $this->{$field}->toJSON();
+            }
+            foreach(static::$lists as $field => $class){
+                if($this->{$field}!==null && count($this->{$field})>0)
+                    $result[$field] = self::ListToJSON($this->{$field});
+            }
+        }
+        return (object)$result;
 	}
 
 	public static function LoadList($array, $pre = [], $post = []): array

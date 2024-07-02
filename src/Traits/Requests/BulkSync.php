@@ -21,11 +21,11 @@ trait BulkSync
         $c = $this->conn;
         $send = $packer->toJSON(['delete' => true]);
         if ($send !== null) {
-            if ($c->process($c->delete("$this->catalogPath/price/offers", $send))->isFailed()) return false;
+            if ($c->process($c->delete("$this->catalogPath/prices", $send))->isFailed()) return false;
         }
         $send = $packer->toJSON(['delete' => false]);
         if ($send !== null) {
-            if ($c->process($c->patch("$this->catalogPath/price/offers", $send))->isFailed()) return false;
+            if ($c->process($c->patch("$this->catalogPath/prices", $send))->isFailed()) return false;
         }
         return true;
     }

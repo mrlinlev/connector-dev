@@ -5,9 +5,12 @@ namespace Leveon\Connector\Models;
 class ProductType extends AModelWithProperties
 {
 
-    protected string $title;
+    protected string $title = '';
     protected int $parent = 0;
 
+    /**
+     * @var string[]
+     */
     protected static array $valueableList = ['title', 'parent'];
 
     public function getTitle(): string
@@ -15,7 +18,7 @@ class ProductType extends AModelWithProperties
         return $this->title;
     }
 
-    public function setTitle($title): static
+    public function setTitle(string $title): static
     {
         $this->title = $title;
         return $this;
@@ -26,7 +29,7 @@ class ProductType extends AModelWithProperties
         return $this->parent;
     }
 
-    public function setParent($parent): static
+    public function setParent(int $parent): static
     {
         $this->parent = $parent;
         return $this;

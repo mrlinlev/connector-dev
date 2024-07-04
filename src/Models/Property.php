@@ -9,8 +9,14 @@ class Property extends AModel
     protected bool $options;
     protected bool $multiple;
     protected int $type;
+    /**
+     * @var PropertyTuning[]
+     */
     protected array $scheme;
 
+    /**
+     * @var string[]
+     */
     protected static array $valueableList = [
         'title',
         'options',
@@ -18,6 +24,9 @@ class Property extends AModel
         'type',
     ];
 
+    /**
+     * @var class-string[]
+     */
     protected static array $lists = [
         'scheme' => PropertyTuning::class
     ];
@@ -27,7 +36,7 @@ class Property extends AModel
         return $this->title;
     }
 
-    public function setTitle($title): static
+    public function setTitle(string $title): static
     {
         $this->title = $title;
         return $this;
@@ -38,7 +47,7 @@ class Property extends AModel
         return $this->options;
     }
 
-    public function setOptions($options): static
+    public function setOptions(bool $options): static
     {
         $this->options = $options;
         return $this;
@@ -49,7 +58,7 @@ class Property extends AModel
         return $this->multiple;
     }
 
-    public function setMultiple($multiple): static
+    public function setMultiple(bool $multiple): static
     {
         $this->multiple = $multiple;
         return $this;
@@ -60,18 +69,25 @@ class Property extends AModel
         return $this->type;
     }
 
-    public function setType($type): static
+    public function setType(int $type): static
     {
         $this->type = $type;
         return $this;
     }
 
+    /**
+     * @return PropertyTuning[]
+     */
     public function getScheme(): array
     {
         return $this->scheme;
     }
 
-    public function setScheme($scheme): static
+    /**
+     * @param PropertyTuning[] $scheme
+     * @return $this
+     */
+    public function setScheme(array $scheme): static
     {
         $this->scheme = $scheme;
         return $this;

@@ -22,7 +22,7 @@ trait Products
     {
         $outer = $this->db->outerProduct($localId);
         $c = $this->conn;
-        $resp = $c->process($c->patch("$this->catalogPath/product/$outer", $model->toJSON()));
+        $resp = $c->process($c->patch("$this->catalogPath/products/$outer", $model->toJSON()));
         return $resp->isSuccessful();
     }
 
@@ -37,7 +37,7 @@ trait Products
     {
         $outer = $this->db->outerProduct($localId);
         $c = $this->conn;
-        $resp = $c->process($c->delete("$this->catalogPath/product/$outer"));
+        $resp = $c->process($c->delete("$this->catalogPath/products/$outer"));
         if ($resp->isSuccessful() || $resp->getCode() === 404) {
             $this->db->unbindProduct($outer);
             return true;
@@ -54,7 +54,7 @@ trait Products
     public function delAllProducts(): bool
     {
         $c = $this->conn;
-        $resp = $c->process($c->delete("$this->catalogPath/product/all"));
+        $resp = $c->process($c->delete("$this->catalogPath/products/all"));
         if ($resp->isSuccessful()) {
             $this->db->unbindAllProducts();
         }

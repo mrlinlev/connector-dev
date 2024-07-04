@@ -93,4 +93,23 @@ trait Offers
         }
         return false;
     }
+
+    #<editor-fold defaultstate="collapsed" desc="deprecated">
+    /**
+     * @param $brandLocalId
+     * @param $localId
+     * @param Offer $model
+     * @return bool
+     * @throws CodeException
+     * @throws ConfigurationException
+     * @throws DBException
+     * @deprecated Use instead stateOffer() method with the same signature
+     */
+    public function createOfferIfNotExists($brandLocalId, $localId, Offer $model): bool
+    {
+        return $this->stateOffer($brandLocalId, $localId, $model);
+    }
+    #</editor-fold>
+
+
 }

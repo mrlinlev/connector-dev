@@ -5,7 +5,8 @@
     "license": "Apache-2.0",
     "version": "0.1.8",
     "scripts": {
-        "migration:up": "Leveon\\Connector\\Deploy\\Installer::Migrate"
+        "migration:up": "Leveon\\Connector\\Deploy\\Installer::Migrate",
+        "phpstan": "vendor/bin/phpstan -c phpstan.neon"
     },
     "autoload": {
         "psr-4": {
@@ -24,6 +25,7 @@
         "ext-json": "*",
         "ext-sqlite3": "*",
         "ext-curl": "*",
+        "phpstan/phpstan": "@stable",
         "composer/composer": "^2.7"
     }
 }

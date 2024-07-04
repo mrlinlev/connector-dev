@@ -4,13 +4,16 @@ namespace Leveon\Connector\Models;
 
 class Product extends AModel
 {
-    protected ?string $title;
-    protected ?string $image;
-    protected ?int $brand;
-    protected ?int $collection;
-    protected ?int $type;
-    protected ?int $accountingUnit;
+    protected ?string $title = '';
+    protected ?string $image = null;
+    protected ?int $brand = null;
+    protected ?int $collection = null;
+    protected ?int $type = null;
+    protected ?int $accountingUnit = null;
 
+    /**
+     * @var string[]
+     */
     protected static array $valueableList = [
         'title',
         'image',

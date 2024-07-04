@@ -4,14 +4,18 @@ namespace Leveon\Connector\Models;
 
 class Offer extends AModelWithProperties
 {
-    protected ?string $title;
-    protected ?string $article;
-    protected ?int $type;
-    protected ?int $brand;
-    protected ?int $collection;
-    protected ?int $accountingUnit;
-    protected ?string $image;
+    protected ?string $title = '';
+    protected ?string $article = '';
+    protected ?int $type = null;
+    protected ?int $product = null;
+    protected ?int $brand = null;
+    protected ?int $collection = null;
+    protected ?int $accountingUnit = null;
+    protected ?string $image = null;
 
+    /**
+     * @var string[]
+     */
     protected static array $valueableList = [
         'title',
         'article',
@@ -23,18 +27,17 @@ class Offer extends AModelWithProperties
         'product',
     ];
 
-    public function getProduct(): ?string
+    public function getProduct(): ?int
     {
         return $this->product;
     }
-
-    public function setProduct(string $product): Offer
+    public function setProduct(?int $product): Offer
     {
         $this->product = $product;
         return $this;
     }
 
-    public function setTitle(?string $title): Offer
+    public function setTitle(string $title): Offer
     {
         $this->title = $title;
         return $this;
@@ -46,13 +49,13 @@ class Offer extends AModelWithProperties
         return $this;
     }
 
-    public function setType(?int $type): Offer
+    public function setType(int $type): Offer
     {
         $this->type = $type;
         return $this;
     }
 
-    public function setBrand(?int $brand): Offer
+    public function setBrand(int $brand): Offer
     {
         $this->brand = $brand;
         return $this;
@@ -64,7 +67,7 @@ class Offer extends AModelWithProperties
         return $this;
     }
 
-    public function setAccountingUnit(?int $accountingUnit): Offer
+    public function setAccountingUnit(int $accountingUnit): Offer
     {
         $this->accountingUnit = $accountingUnit;
         return $this;

@@ -15,7 +15,7 @@ trait Offers
      */
     public function outerOffer($localId): ?string
     {
-        return $this->val('SELECT "outer" FROM brands WHERE local=?', $localId);
+        return $this->val('SELECT "outer" FROM offers WHERE local=?', $localId);
     }
 
     /**

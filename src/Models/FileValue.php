@@ -27,18 +27,18 @@ class FileValue extends AValue
         return $this->file;
     }
 
-    public function setFile($file): static
+    public function setFile(string $file): static
     {
         $this->file = $file;
         return $this;
     }
 
-    public function getTitle(): string
+    public function getTitle(): ?string
     {
         return $this->title;
     }
 
-    public function setTitle($title): static
+    public function setTitle(string $title): static
     {
         $this->title = $title;
         return $this;

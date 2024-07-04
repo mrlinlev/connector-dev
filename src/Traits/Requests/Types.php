@@ -17,7 +17,7 @@ trait Types
      * @throws ConfigurationException
      * @throws DBException
      */
-    public function upType($localId, ProductType $type): bool
+    public function upProductType($localId, ProductType $type): bool
     {
         $c = $this->conn;
         $outer = $this->db->outerType($localId);
@@ -40,7 +40,7 @@ trait Types
      * @throws ConfigurationException
      * @throws DBException
      */
-    public function stateType($localId, ProductType $type): bool
+    public function stateProductType($localId, ProductType $type): bool
     {
         $c = $this->conn;
         $outer = $this->db->outerType($localId);
@@ -59,7 +59,7 @@ trait Types
      * @throws ConfigurationException
      * @throws DBException
      */
-    public function delType($localId): bool
+    public function delProductType($localId): bool
     {
         $outer = $this->db->outerType($localId);
         $c = $this->conn;
@@ -77,7 +77,7 @@ trait Types
      * @throws ConfigurationException
      * @throws DBException
      */
-    public function delAllTypes(): bool
+    public function delAllProductTypes(): bool
     {
         $c = $this->conn;
         $resp = $c->process($c->delete("$this->catalogPath/type/all"));
@@ -86,4 +86,21 @@ trait Types
         }
         return $resp->isSuccessful();
     }
+
+    #<editor-fold defaultstate="collapsed" desc="deprecated">
+    /**
+     * @param $localId
+     * @param ProductType $model
+     * @return bool
+     * @throws CodeException
+     * @throws ConfigurationException
+     * @throws DBException
+     * @deprecated Use instead stateProductType() method with the same signature
+     */
+    public function createProductTypeIfNotExists($localId, ProductType $model): bool
+    {
+        return $this->stateProductType($localId, $model);
+    }
+    #</editor-fold>
+
 }

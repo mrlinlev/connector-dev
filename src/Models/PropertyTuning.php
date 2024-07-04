@@ -5,12 +5,15 @@ namespace Leveon\Connector\Models;
 class PropertyTuning extends AModel
 {
 
-    protected mixed $defaultValue;
-    protected ?int $defaultUnit;
-    protected ?int $unitsGroup;
-    protected ?int $storageUnit;
-    protected ?int $displayUnit;
+    protected mixed $defaultValue = null;
+    protected ?int $defaultUnit = null;
+    protected ?int $unitsGroup = null;
+    protected ?int $storageUnit = null;
+    protected ?int $displayUnit = null;
 
+    /**
+     * @var array|string[]
+     */
     protected static array $valueableList = [
         'defaultValue',
         'defaultUnit',

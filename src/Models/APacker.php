@@ -48,7 +48,7 @@ abstract class APacker{
 					if(!isset($o[$price->val($key)])) $o[$price->val($key)] = [];
 					$o[$price->val($key)][] = $price->toJSON($left);
 				}
-				$result["${$key}"] = $o;
+				$result["\${$key}"] = $o;
 			}elseif(count($left)===1){
 				$vkey = $left[0];
 				foreach($list as $price){
@@ -62,7 +62,7 @@ abstract class APacker{
 						}
 					}
 				}
-				$result["${$key}"] = $o;
+				$result["\${$key}"] = $o;
 			}else{
 				foreach($list as $price){
 					$o[] = $price->val($key);

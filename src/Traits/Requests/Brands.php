@@ -87,4 +87,19 @@ trait Brands
         return $resp->isSuccessful();
     }
 
+    #<editor-fold defaultstate="collapsed" desc="deprecated">
+    /**
+     * @param $localId
+     * @param Brand $brand
+     * @return bool
+     * @throws CodeException
+     * @throws ConfigurationException
+     * @throws DBException
+     * @deprecated Use instead stateBrand() method with the same signature
+     */
+    public function createBrandIfNotExists($localId, Brand $brand): bool
+    {
+        return $this->stateBrand($localId, $brand);
+    }
+    #</editor-fold>
 }

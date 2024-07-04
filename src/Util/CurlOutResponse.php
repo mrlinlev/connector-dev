@@ -2,25 +2,31 @@
 
 namespace Leveon\Connector\Util;
 
-use stdClass;
+use CurlHandle;
 
 class CurlOutResponse
 {
-    private int $code;
-    private array $headers;
-    private string $content;
-    private bool $successful;
-    private ?stdClass $json;
+    private int $code = 0;
+    /**
+     * @var string[]
+     */
+    private array $headers = [];
+    private ?string $content = null;
+    private bool $successful = false;
+    private mixed $json = null;
 
-    public function __construct($ch, $response){
+    public function __construct(CurlHandle $ch, string $response){
         $header_size = curl_getinfo($ch, CURLINFO_HEADER_SIZE);
         $header = substr($response, 0, $header_size);
         $this->parseHeaders($header);
         $this->content = substr($response, $header_size);
         $this->successful = intdiv($this->code, 100) === 2;
+        if(!$this->successful){
+            var_dump($response);
+        }
     }
 
-    public static function Parse($ch, $response): CurlOutResponse
+    public static function Parse(CurlHandle $ch, string $response): CurlOutResponse
     {
         return new self($ch, $response);
     }
@@ -46,7 +52,7 @@ class CurlOutResponse
     }
 
     /**
-     * @return mixed
+     * @return string[]
      */
     public function getHeaders(): array
     {
@@ -54,11 +60,11 @@ class CurlOutResponse
     }
 
     /**
-     * @param $key
+     * @param string $key
      * @param null $default
      * @return string | null
      */
-    public function getHeader($key, $default = null): string | null
+    public function getHeader(string $key, $default = null): ?string
     {
         return $this->headers[$key] ?? $default;
     }
@@ -73,7 +79,7 @@ class CurlOutResponse
         return $this->successful === false;
     }
 
-    public function getContent(): string
+    public function getContent(): ?string
     {
         return $this->content;
     }
@@ -83,8 +89,9 @@ class CurlOutResponse
         return $this->code;
     }
 
-    public function json(): stdClass{
-        if(strlen($this->content)>0 && $this->json === null){
+    public function json(): mixed
+    {
+        if($this->content!==null && strlen($this->content)>0 && $this->json === null){
             $this->json = json_decode($this->content);
         }
         return $this->json;

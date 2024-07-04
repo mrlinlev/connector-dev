@@ -7,7 +7,7 @@ use CurlHandle;
 
 class CurlOutRequest
 {
-    private static ?CurlHandle $ch;
+    private static ?CurlHandle $ch = null;
     private string $_url;
     private string $_method = "GET";
     private $_data;

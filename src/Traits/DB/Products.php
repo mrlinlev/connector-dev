@@ -16,7 +16,7 @@ trait Products
      */
     public function outerProduct($localId): ?string
     {
-        return $this->val('SELECT "outer" FROM brands WHERE local=?', $localId);
+        return $this->val('SELECT "outer" FROM products WHERE local=?', $localId);
     }
 
     /**
@@ -27,7 +27,7 @@ trait Products
      */
     public function localProduct(string $outerId): mixed
     {
-        return $this->val('SELECT local FROM brands WHERE "outer"=?', $outerId);
+        return $this->val('SELECT local FROM products WHERE "outer"=?', $outerId);
     }
 
     /**

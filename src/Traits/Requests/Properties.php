@@ -86,4 +86,21 @@ trait Properties
         }
         return $resp->isSuccessful();
     }
+
+    #<editor-fold defaultstate="collapsed" desc="deprecated">
+    /**
+     * @param $localId
+     * @param Property $model
+     * @return bool
+     * @throws CodeException
+     * @throws ConfigurationException
+     * @throws DBException
+     * @deprecated Use instead stateProperty() method with the same signature
+     */
+    public function createPropertyIfNotExists($localId, Property $model): bool
+    {
+        return $this->stateProperty($localId, $model);
+    }
+    #</editor-fold>
+
 }

@@ -91,4 +91,22 @@ trait Collections
         }
         return $resp->isSuccessful();
     }
+
+    #<editor-fold defaultstate="collapsed" desc="deprecated">
+    /**
+     * @param $brandLocalId
+     * @param $localId
+     * @param Collection $model
+     * @return bool
+     * @throws CodeException
+     * @throws ConfigurationException
+     * @throws DBException
+     * @deprecated Use instead stateCollection() method with the same signature
+     */
+    public function createCollectionIfNotExists($brandLocalId, $localId, Collection $model): bool
+    {
+        return $this->stateCollection($brandLocalId, $localId, $model);
+    }
+    #</editor-fold>
+
 }

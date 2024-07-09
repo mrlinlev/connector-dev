@@ -10,8 +10,13 @@ abstract class APacker{
 	}
 	
 	abstract function toJSON($rules = []);
-	
-	protected function pack($list, $class): ?array
+
+    /**
+     * @param $list
+     * @param $class
+     * @return array|null
+     */
+    protected function pack($list, $class): ?array
     {
 		if(count($list)===0) return null;
 		$compress = [];

@@ -30,9 +30,9 @@ trait Offers
             $c->post("$this->catalogPath/".($outerProduct? "existed-product/$outerProduct" : 'new-product')."/offer", $payload)
         );
         if ($resp->isSuccessful()) {
-            $this->db->bindOffer($localId, $resp->json()->id, $productLocalId, $resp->json()->product);
+            $this->db->bindOffer($localId, $resp->json()->id, $productLocalId, $resp->json()->product->id);
             if($outerProduct===null){
-                $this->db->bindProduct($productLocalId, $resp->json()->product);
+                $this->db->bindProduct($productLocalId, $resp->json()->product->id);
             }
             return true;
         }
@@ -63,7 +63,7 @@ trait Offers
         if ($resp->isSuccessful() && $outer===null) {
             $this->db->bindOffer($localId, $resp->json()->id, $productLocalId, $resp->json()->product);
             if($outerProduct===null){
-                $this->db->bindProduct($productLocalId, $resp->json()->product);
+                $this->db->bindProduct($productLocalId, $resp->json()->product->id);
             }
         }
         return $resp->isSuccessful();
